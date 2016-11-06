@@ -1,0 +1,16 @@
+{
+    "name": "michalbrauner/forex-calculator",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Michal Brauner",
+            "email": "michal.br@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "ForexCalculator\\": "src/"
+        }
+    }
+}
