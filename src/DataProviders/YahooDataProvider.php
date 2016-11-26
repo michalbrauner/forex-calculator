@@ -17,21 +17,7 @@ class YahooDataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function getEnabledSymbols()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getEnabledCurrencies()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isEnabledSymbol($symbol)
     {
     }
 

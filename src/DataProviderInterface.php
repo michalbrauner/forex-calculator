@@ -17,18 +17,7 @@ interface DataProviderInterface
     /**
      * @return array
      */
-    public function getEnabledSymbols();
-
-    /**
-     * @return array
-     */
     public function getEnabledCurrencies();
-
-    /**
-     * @param string $symbol
-     * @return boolean
-     */
-    public function isEnabledSymbol($symbol);
 
     /**
      * @param string $currency
