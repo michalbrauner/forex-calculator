@@ -2,7 +2,6 @@
 
 namespace ForexCalculator\DataProviders;
 
-use ForexCalculator\DataProviderInterface;
 use ForexCalculator\Exceptions\PriceNotLoadedException;
 use GuzzleHttp\Client;
 use InvalidArgumentException;

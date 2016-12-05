@@ -1,6 +1,6 @@
 <?php
 
-namespace ForexCalculator;
+namespace ForexCalculator\DataProviders;
 
 interface DataProviderInterface
 {

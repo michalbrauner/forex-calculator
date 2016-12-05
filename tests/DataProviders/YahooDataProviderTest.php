@@ -2,7 +2,7 @@
 
 namespace Tests\ForexCalculator\DataProviders\YahooDataProvider;
 
-use ForexCalculator\DataProviderInterface;
+use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
 use ForexCalculator\Exceptions\PriceNotLoadedException;
 use GuzzleHttp\Client;
