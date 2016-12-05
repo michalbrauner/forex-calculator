@@ -4,7 +4,6 @@ namespace ForexCalculator\Services;
 
 interface SymbolProviderInterface
 {
-
     /**
      * @param string $symbol
      * @return bool
@@ -15,5 +14,4 @@ interface SymbolProviderInterface
      * @return array
      */
     public function getSymbols();
-
 }

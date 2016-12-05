@@ -4,7 +4,6 @@ namespace ForexCalculator\Services;
 
 class SymbolProvider implements SymbolProviderInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -55,5 +54,4 @@ class SymbolProvider implements SymbolProviderInterface
             'EURCZK',
         ];
     }
-
 }

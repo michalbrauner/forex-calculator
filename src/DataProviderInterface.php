@@ -4,7 +4,6 @@ namespace ForexCalculator;
 
 interface DataProviderInterface
 {
-
     const PRICE_ASK = 'ask';
     const PRICE_BID = 'bid';
 
@@ -14,5 +13,4 @@ interface DataProviderInterface
      * @return string
      */
     public function getPrice($symbol, $priceType);
-
 }
