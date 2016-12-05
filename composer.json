@@ -15,5 +15,8 @@
             "ForexCalculator\\": "src/",
             "Tests\\": "tests/"
         }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
     }
 }

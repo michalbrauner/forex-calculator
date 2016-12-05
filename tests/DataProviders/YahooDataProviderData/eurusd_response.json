@@ -1,0 +1,18 @@
+{
+  "query": {
+    "count": 1,
+    "created": "2016-11-27T16:50:43Z",
+    "lang": "en-US",
+    "results": {
+      "rate": {
+        "id": "EURUSD",
+        "Name": "EUR/USD",
+        "Rate": "1.1234",
+        "Date": "11/25/2016",
+        "Time": "11:48pm",
+        "Ask": "1.1238",
+        "Bid": "1.1234"
+      }
+    }
+  }
+}

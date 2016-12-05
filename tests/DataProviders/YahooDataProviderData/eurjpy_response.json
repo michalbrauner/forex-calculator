@@ -1,0 +1,18 @@
+{
+  "query": {
+    "count": 1,
+    "created": "2016-11-27T16:50:43Z",
+    "lang": "en-US",
+    "results": {
+      "rate": {
+        "id": "EURJPY",
+        "Name": "EUR/JPY",
+        "Rate": "1.0590",
+        "Date": "11/25/2016",
+        "Time": "11:48pm",
+        "Ask": "1.125",
+        "Bid": "1.123"
+      }
+    }
+  }
+}
