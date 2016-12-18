@@ -3,7 +3,7 @@ namespace ForexCalculator\Exceptions;
 
 use Exception;
 
-class PriceNotLoadedException extends Exception
+class PriceNotFoundException extends Exception
 {
 
 }

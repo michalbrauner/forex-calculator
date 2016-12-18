@@ -4,7 +4,7 @@ namespace Tests\ForexCalculator\DataProviders\YahooDataProvider;
 
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
-use ForexCalculator\Exceptions\PriceNotLoadedException;
+use ForexCalculator\Exceptions\PriceNotFoundException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Stream;
@@ -24,7 +24,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGetPriceInvalidSymbol()
     {
-        $this->expectException(PriceNotLoadedException::class);
+        $this->expectException(PriceNotFoundException::class);
 
         $dataProvider = $this->getYahooDataProvider('');
         $dataProvider->getPrice('unknownSymbol', DataProviderInterface::PRICE_ASK);

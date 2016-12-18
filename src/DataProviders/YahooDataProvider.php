@@ -2,7 +2,7 @@
 
 namespace ForexCalculator\DataProviders;
 
-use ForexCalculator\Exceptions\PriceNotLoadedException;
+use ForexCalculator\Exceptions\PriceNotFoundException;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
 use RuntimeException;
@@ -38,7 +38,7 @@ class YahooDataProvider implements DataProviderInterface
         $data = $this->yahooApiQuery($yqlQuery);
 
         if ($data === null) {
-            throw new PriceNotLoadedException(sprintf('Couldn\'t get price for symbol \'%s\'', $symbol));
+            throw new PriceNotFoundException(sprintf('Couldn\'t get price for symbol \'%s\'', $symbol));
         }
 
         return $priceType === self::PRICE_ASK
