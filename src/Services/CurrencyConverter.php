@@ -33,8 +33,11 @@ class CurrencyConverter
     {
         $symbol = sprintf('%s%s', $fromCurrency, $toCurrency);
 
+        $priceAsk = (float)$this->yahooDataProvider->getPrice($symbol, DataProviderInterface::PRICE_ASK);
+        $priceBid = (float)$this->yahooDataProvider->getPrice($symbol, DataProviderInterface::PRICE_BID);
+
         $convertedValue =
-            (float)$this->yahooDataProvider->getPrice($symbol, DataProviderInterface::PRICE_ASK) * $value;
+            (($priceAsk + $priceBid) / 2) * $value;
 
         return round($convertedValue, self::ROUND_TO_PRECISION);
     }

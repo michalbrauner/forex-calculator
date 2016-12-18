@@ -2,7 +2,6 @@
 
 namespace Tests\ForexCalculator\Services;
 
-use ForexCalculator\DataProviders\SymbolProvider;
 use ForexCalculator\DataProviders\YahooDataProvider;
 use ForexCalculator\Services\CurrencyConverter;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -32,6 +31,8 @@ class CurrencyConverterTest extends PHPUnit_Framework_TestCase
         return [
             [1.05, 1, '1.0452'],
             [0.96, 1, '0.9571'],
+            [2.61, 2.5, '1.0452'],
+            [2.39, 2.5, '0.9571'],
         ];
     }
 
