@@ -10,6 +10,7 @@ use stdClass;
 
 class YahooDataProvider implements DataProviderInterface
 {
+
     const YAHOO_FINANCE_API_URL = 'http://query.yahooapis.com/v1/public/yql';
 
     /**
@@ -73,4 +74,5 @@ class YahooDataProvider implements DataProviderInterface
 
         throw new RuntimeException(sprintf('Yahoo API query failed: \'%s\'', $query));
     }
+
 }

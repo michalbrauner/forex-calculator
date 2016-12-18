@@ -4,6 +4,7 @@ namespace ForexCalculator\DataProviders;
 
 class CurrencyProvider implements CurrencyProviderInterface
 {
+
     /**
      * @inheritdoc
      */
@@ -17,6 +18,7 @@ class CurrencyProvider implements CurrencyProviderInterface
      */
     public function getCurrencies()
     {
+
         return ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'NZD'];
     }
 }

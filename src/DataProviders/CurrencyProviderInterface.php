@@ -4,6 +4,7 @@ namespace ForexCalculator\DataProviders;
 
 interface CurrencyProviderInterface
 {
+
     /**
      * @param string $symbol
      * @return bool
@@ -14,4 +15,5 @@ interface CurrencyProviderInterface
      * @return array
      */
     public function getCurrencies();
+
 }
