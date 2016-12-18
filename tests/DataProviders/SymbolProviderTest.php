@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Tests\ForexCalculator\Services\CurrencyProvider;
+namespace Tests\ForexCalculator\DataProviders;
 
-use ForexCalculator\Services\SymbolProvider;
+use ForexCalculator\DataProviders\SymbolProvider;
 use PHPUnit_Framework_TestCase;
 
 class SymbolProviderTest extends PHPUnit_Framework_TestCase

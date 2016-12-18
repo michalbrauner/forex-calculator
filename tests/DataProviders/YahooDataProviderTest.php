@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\ForexCalculator\DataProviders\YahooDataProvider;
+namespace Tests\ForexCalculator\DataProviders;
 
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;

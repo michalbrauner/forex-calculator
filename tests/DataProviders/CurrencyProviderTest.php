@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\ForexCalculator\Services\CurrencyProvider;
+namespace Tests\ForexCalculator\DataProviders;
 
-use ForexCalculator\Services\CurrencyProvider;
+use ForexCalculator\DataProviders\CurrencyProvider;
 use PHPUnit_Framework_TestCase;
 
 class CurrencyProviderTest extends PHPUnit_Framework_TestCase
