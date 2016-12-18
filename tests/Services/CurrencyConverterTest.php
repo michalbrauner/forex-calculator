@@ -36,22 +36,6 @@ class CurrencyConverterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool[] $symbolExistsReturnValues
-     * @return SymbolProvider|PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockSymbolProvider(array $symbolExistsReturnValues)
-    {
-        $symbolProvider = $this->getMockBuilder(SymbolProvider::class)
-            ->setMethods(['symbolExists'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $symbolProvider->method('symbolExists')->willReturnOnConsecutiveCalls($symbolExistsReturnValues);
-
-        return $symbolProvider;
-    }
-
-    /**
      * @param string $priceFromDataProvider
      * @return YahooDataProvider|PHPUnit_Framework_MockObject_MockObject
      */
