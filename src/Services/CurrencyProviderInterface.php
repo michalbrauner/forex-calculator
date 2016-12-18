@@ -8,7 +8,7 @@ interface CurrencyProviderInterface
      * @param string $symbol
      * @return bool
      */
-    public function currencyExists($symbol);
+    public function currencyExists(string $symbol);
 
     /**
      * @return array

@@ -7,7 +7,7 @@ class CurrencyProvider implements CurrencyProviderInterface
     /**
      * @inheritdoc
      */
-    public function currencyExists($symbol)
+    public function currencyExists(string $symbol)
     {
         return in_array(strtoupper($symbol), $this->getCurrencies(), true);
     }

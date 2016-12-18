@@ -28,7 +28,7 @@ class YahooDataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function getPrice($symbol, $priceType)
+    public function getPrice(string $symbol, string $priceType)
     {
         if (!in_array($priceType, array(self::PRICE_ASK, self::PRICE_BID), true)) {
             throw new InvalidArgumentException("Argument priceType has invalid value ('{$priceType}')");
@@ -50,7 +50,7 @@ class YahooDataProvider implements DataProviderInterface
      * @param string $query
      * @return stdClass|null
      */
-    private function yahooApiQuery($query)
+    private function yahooApiQuery(string $query)
     {
         $url = sprintf(
             '%s?q=%s&env=store://datatables.org/alltableswithkeys&format=json',

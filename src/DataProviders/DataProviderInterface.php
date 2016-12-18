@@ -12,5 +12,5 @@ interface DataProviderInterface
      * @param string $priceType
      * @return string
      */
-    public function getPrice($symbol, $priceType);
+    public function getPrice(string $symbol, string $priceType);
 }

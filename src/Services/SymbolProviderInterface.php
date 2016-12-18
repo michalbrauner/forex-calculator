@@ -8,7 +8,7 @@ interface SymbolProviderInterface
      * @param string $symbol
      * @return bool
      */
-    public function symbolExists($symbol);
+    public function symbolExists(string $symbol);
 
     /**
      * @return array

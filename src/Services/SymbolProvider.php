@@ -7,7 +7,7 @@ class SymbolProvider implements SymbolProviderInterface
     /**
      * @inheritdoc
      */
-    public function symbolExists($symbol)
+    public function symbolExists(string $symbol)
     {
         return in_array(strtoupper($symbol), $this->getSymbols(), true);
     }
