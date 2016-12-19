@@ -6,11 +6,6 @@ class Trade
 {
 
     /**
-     * @var string
-     */
-    private $symbol;
-
-    /**
      * @var FloatNumberInterface
      */
     private $input;
@@ -26,21 +21,42 @@ class Trade
     private $profitTarget;
 
     /**
-     * @param string $symbol
      * @param FloatNumberInterface $input
      * @param FloatNumberInterface $stopLoss
      * @param FloatNumberInterface $profitTarget
      */
     public function __construct(
-        string $symbol,
         FloatNumberInterface $input,
         FloatNumberInterface $stopLoss,
         FloatNumberInterface $profitTarget
     ) {
-        $this->symbol = $symbol;
         $this->input = $input;
         $this->stopLoss = $stopLoss;
         $this->profitTarget = $profitTarget;
+    }
+
+    /**
+     * @return FloatNumberInterface
+     */
+    public function getInput(): FloatNumberInterface
+    {
+        return $this->input;
+    }
+
+    /**
+     * @return FloatNumberInterface
+     */
+    public function getStopLoss(): FloatNumberInterface
+    {
+        return $this->stopLoss;
+    }
+
+    /**
+     * @return FloatNumberInterface
+     */
+    public function getProfitTarget(): FloatNumberInterface
+    {
+        return $this->profitTarget;
     }
 
 }
