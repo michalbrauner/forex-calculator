@@ -2,22 +2,21 @@
 
 namespace ForexCalculator\DataObjects;
 
-use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
+use ForexCalculator\PrecisionProviders\PrecisionProviderInterface;
 use InvalidArgumentException;
 
 class FloatNumberFactory
 {
 
     /**
-     * @var PricePrecisionProvider
+     * @var PrecisionProviderInterface
      */
     private $precisionProvider;
 
     /**
-     * @param PricePrecisionProvider $precisionProvider
-     * @internal param string $symbol
+     * @param PrecisionProviderInterface $precisionProvider
      */
-    public function __construct(PricePrecisionProvider $precisionProvider)
+    public function __construct(PrecisionProviderInterface $precisionProvider)
     {
         $this->precisionProvider = $precisionProvider;
     }
@@ -36,6 +35,19 @@ class FloatNumberFactory
         $numberFloat = round(floatval($number), $precision);
 
         return new FloatNumber($numberFloat * pow(10, $precision), $precision);
+    }
+
+    /**
+     * @param int $number
+     * @param int $precision
+     * @return FloatNumber
+     */
+    public function createFromNumberAndPrecision(int $number, int $precision): FloatNumber
+    {
+        return new FloatNumber(
+            round($number * pow(10, $this->precisionProvider->getPrecision() - $precision)),
+            $this->precisionProvider->getPrecision()
+        );
     }
 
     /**

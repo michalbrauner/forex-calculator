@@ -15,4 +15,9 @@ interface FloatNumberInterface
      */
     public function getPrecision(): int;
 
+    /**
+     * @return float
+     */
+    public function getNumberAsFloat(): float;
+
 }

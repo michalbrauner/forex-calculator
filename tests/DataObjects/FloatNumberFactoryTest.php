@@ -13,6 +13,38 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 {
 
     /**
+     * @dataProvider getDataForCreateFromNumberAndPrecision
+     *
+     * @param FloatNumber $expectedNumber
+     * @param int $number
+     * @param int $numberPrecision
+     * @param int $outputPrecision
+     */
+    public function testCreateFromNumberAndPrecision(
+        FloatNumber $expectedNumber,
+        int $number,
+        int $numberPrecision,
+        int $outputPrecision
+    ) {
+        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider($outputPrecision));
+        $this->assertEquals($expectedNumber, $numberFactory->createFromNumberAndPrecision($number, $numberPrecision));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataForCreateFromNumberAndPrecision()
+    {
+        return [
+            [new FloatNumber(12340, 2), '1234', 1, 2],
+            [new FloatNumber(123, 1), '1234', 2, 1],
+            [new FloatNumber(1235, 1), '12345', 2, 1],
+            [new FloatNumber(123, 0), '12345', 2, 0],
+            [new FloatNumber(12300, 2), '123', 0, 2],
+        ];
+    }
+
+    /**
      * @dataProvider getDataForCreateWithInvalidNumberThrownException
      *
      * @param string $number

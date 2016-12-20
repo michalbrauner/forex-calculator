@@ -41,4 +41,12 @@ class FloatNumber implements FloatNumberInterface
         return $this->precision;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getNumberAsFloat(): float
+    {
+        return $this->number / pow(10, $this->getPrecision());
+    }
+
 }
