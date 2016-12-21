@@ -9,6 +9,7 @@ use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
 use ForexCalculator\PrecisionProviders\MoneyPrecisionProvider;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
+use ForexCalculator\Services\FloatNumberMath;
 use ForexCalculator\Services\TradeSizeRiskCalculator;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
@@ -43,7 +44,8 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
             $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
             new FloatNumberFactory(new MoneyPrecisionProvider()),
             $this->getForexDataProvider($forexDataProviderPrice),
-            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision))
+            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),
+            new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
         );
 
         $trade = new Trade($input, $stopLoss, $profitTarget);
@@ -99,7 +101,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 $priceFloatNumberFactory->create('1.03856'),
                 100000,
                 '1',
-                4,
+                5,
                 false,
             ],
             [
@@ -109,7 +111,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 $priceFloatNumberFactory->create('1.03856'),
                 10000,
                 '1',
-                4,
+                5,
                 false,
             ],
             [
@@ -119,7 +121,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 $priceFloatNumberFactory->create('1.03856'),
                 1000,
                 '1',
-                4,
+                5,
                 false,
             ],
             [
@@ -129,7 +131,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 $priceFloatNumberFactory->create('1.03836'),
                 1000,
                 '1',
-                4,
+                5,
                 false,
             ],
             [
@@ -139,17 +141,17 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 $priceFloatNumberFactory->create('1.03836'),
                 1000,
                 '118.015',
-                3,
+                5,
                 true,
             ],
             [
-                $moneyNumberFactory->create('118.01'),
+                $moneyNumberFactory->create('118.02'),
                 $priceFloatNumberFactory->create('1.03846'),
                 $priceFloatNumberFactory->create('1.03856'),
                 $priceFloatNumberFactory->create('1.03836'),
                 10000,
                 '118.015',
-                3,
+                5,
                 true,
             ],
         ];

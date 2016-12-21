@@ -38,6 +38,15 @@ class FloatNumberFactory
     }
 
     /**
+     * @param FloatNumberInterface $number
+     * @return FloatNumberInterface
+     */
+    public function createFromNumber(FloatNumberInterface $number): FloatNumberInterface
+    {
+        return $this->createFromNumberAndPrecision($number->getNumber(), $number->getPrecision());
+    }
+
+    /**
      * @param int $number
      * @param int $precision
      * @return FloatNumberInterface
@@ -59,6 +68,14 @@ class FloatNumberFactory
     public function createWithGivenPrecision(int $number, int $precision, int $outputPrecision): FloatNumberInterface
     {
         return new FloatNumber(round($number * pow(10, $outputPrecision - $precision)), $outputPrecision);
+    }
+
+    /**
+     * @return PrecisionProviderInterface
+     */
+    public function getPrecisionProvider()
+    {
+        return $this->precisionProvider;
     }
 
     /**

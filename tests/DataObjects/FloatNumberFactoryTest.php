@@ -61,6 +61,10 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
     ) {
         $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $this->assertEquals($expectedNumber, $numberFactory->createFromNumberAndPrecision($number, $numberPrecision));
+        $this->assertEquals(
+            $expectedNumber,
+            $numberFactory->createFromNumber(new FloatNumber($number, $numberPrecision))
+        );
     }
 
     /**
