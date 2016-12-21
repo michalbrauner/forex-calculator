@@ -8,7 +8,7 @@ use ForexCalculator\DataObjects\Trade;
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
 use ForexCalculator\PrecisionProviders\MoneyPrecisionProvider;
-use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
+use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use ForexCalculator\Services\TradeSizeRiskCalculator;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
@@ -25,7 +25,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
      * @param FloatNumber $profitTarget
      * @param int $numberOfUnits
      * @param string $forexDataProviderPrice
-     * @param int $forexDatePrecision
+     * @param int $forexDataPrecision
      * @param bool $convertCurrency
      */
     public function testGetLoss(
@@ -35,7 +35,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         FloatNumber $profitTarget,
         int $numberOfUnits,
         string $forexDataProviderPrice,
-        int $forexDatePrecision,
+        int $forexDataPrecision,
         bool $convertCurrency
     ) {
         $tradeSizeRiskCalculator = new TradeSizeRiskCalculator(
@@ -43,7 +43,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
             $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
             new FloatNumberFactory(new MoneyPrecisionProvider()),
             $this->getForexDataProvider($forexDataProviderPrice),
-            new FloatNumberFactory($this->getPrecisionProvider($forexDatePrecision))
+            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision))
         );
 
         $trade = new Trade($input, $stopLoss, $profitTarget);
@@ -58,8 +58,8 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
     public function dataForTestGetLoss(): array
     {
         $moneyNumberFactory = new FloatNumberFactory(new MoneyPrecisionProvider());
-        $priceFloatNumberFactoryJpy = new FloatNumberFactory($this->getPrecisionProvider(3));
-        $priceFloatNumberFactory = new FloatNumberFactory($this->getPrecisionProvider(4));
+        $priceFloatNumberFactoryJpy = new FloatNumberFactory(new UniversalPrecisionProvider(3));
+        $priceFloatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(4));
 
         return [
             [
@@ -153,22 +153,6 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
                 true,
             ],
         ];
-    }
-
-    /**
-     * @param int $precision
-     * @return PricePrecisionProvider|PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPrecisionProvider(int $precision): PricePrecisionProvider
-    {
-        $precisionProvider = $this->getMockBuilder(PricePrecisionProvider::class)
-            ->setMethods(['getPrecision'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $precisionProvider->method('getPrecision')->willReturn($precision);
-
-        return $precisionProvider;
     }
 
     /**

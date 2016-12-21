@@ -5,9 +5,8 @@ namespace Tests\ForexCalculator\DataObjects;
 use ForexCalculator\DataObjects\FloatNumber;
 use ForexCalculator\DataObjects\FloatNumberFactory;
 use ForexCalculator\DataObjects\FloatNumberInterface;
-use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
+use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use InvalidArgumentException;
-use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
 class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
@@ -27,7 +26,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         int $numberPrecision,
         int $outputPrecision
     ) {
-        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider(0));
+        $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(0));
         $this->assertEquals(
             $expectedNumber,
             $numberFactory->createWithGivenPrecision($number, $numberPrecision, $outputPrecision)
@@ -60,7 +59,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         int $numberPrecision,
         int $outputPrecision
     ) {
-        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider($outputPrecision));
+        $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $this->assertEquals($expectedNumber, $numberFactory->createFromNumberAndPrecision($number, $numberPrecision));
     }
 
@@ -85,7 +84,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateWithInvalidNumberThrownException(string $number)
     {
-        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider(1));
+        $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(1));
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
@@ -117,7 +116,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate(FloatNumber $expectedNumber, string $number, int $precision)
     {
-        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider($precision));
+        $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($precision));
         $this->assertEquals($expectedNumber, $numberFactory->create($number));
     }
 
@@ -135,22 +134,6 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
             [new FloatNumber(12345, 2), '  123.45  ', 2],
             [new FloatNumber(12345, 2), "\t123.45\t", 2],
         ];
-    }
-
-    /**
-     * @param int $precision
-     * @return PricePrecisionProvider|PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPrecisionProvider(int $precision): PricePrecisionProvider
-    {
-        $precisionProvider = $this->getMockBuilder(PricePrecisionProvider::class)
-            ->setMethods(['getPrecision'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $precisionProvider->method('getPrecision')->willReturn($precision);
-
-        return $precisionProvider;
     }
 
 }

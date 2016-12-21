@@ -5,11 +5,11 @@ namespace Tests\ForexCalculator\DataObjects;
 use ForexCalculator\DataObjects\FloatNumberFactory;
 use ForexCalculator\DataObjects\FloatNumberInterface;
 use ForexCalculator\DataObjects\Trade;
-use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
+use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use InvalidArgumentException;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit_Framework_TestCase;
 
-class TradeTest extends \PHPUnit_Framework_TestCase
+class TradeTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -39,8 +39,8 @@ class TradeTest extends \PHPUnit_Framework_TestCase
      */
     public function getDataForCreateTrade()
     {
-        $floatNumberFactory = new FloatNumberFactory($this->getPrecisionProvider(4));
-        $floatNumberFactory2 = new FloatNumberFactory($this->getPrecisionProvider(5));
+        $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(4));
+        $floatNumberFactory2 = new FloatNumberFactory(new UniversalPrecisionProvider(5));
 
         return [
             [
@@ -65,22 +65,6 @@ class TradeTest extends \PHPUnit_Framework_TestCase
                 $floatNumberFactory->create('1.8'),
             ],
         ];
-    }
-
-    /**
-     * @param int $precision
-     * @return PricePrecisionProvider|PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPrecisionProvider(int $precision): PricePrecisionProvider
-    {
-        $precisionProvider = $this->getMockBuilder(PricePrecisionProvider::class)
-            ->setMethods(['getPrecision'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $precisionProvider->method('getPrecision')->willReturn($precision);
-
-        return $precisionProvider;
     }
 
 }
