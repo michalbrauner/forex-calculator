@@ -4,6 +4,7 @@ namespace Tests\ForexCalculator\DataObjects;
 
 use ForexCalculator\DataObjects\FloatNumber;
 use ForexCalculator\DataObjects\FloatNumberFactory;
+use ForexCalculator\DataObjects\FloatNumberInterface;
 use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
 use InvalidArgumentException;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -11,6 +12,39 @@ use PHPUnit_Framework_TestCase;
 
 class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @dataProvider getDataForCreateWithGivenPrecision
+     *
+     * @param FloatNumberInterface $expectedNumber
+     * @param int $number
+     * @param int $numberPrecision
+     * @param int $outputPrecision
+     */
+    public function testCreateWithGivenPrecision(
+        FloatNumberInterface $expectedNumber,
+        int $number,
+        int $numberPrecision,
+        int $outputPrecision
+    ) {
+        $numberFactory = new FloatNumberFactory($this->getPrecisionProvider(0));
+        $this->assertEquals(
+            $expectedNumber,
+            $numberFactory->createWithGivenPrecision($number, $numberPrecision, $outputPrecision)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataForCreateWithGivenPrecision()
+    {
+        return [
+            [new FloatNumber(12340, 2), 1234, 1, 2],
+            [new FloatNumber(123, 0), 1234, 1, 0],
+            [new FloatNumber(1235, 1), 12345, 2, 1],
+        ];
+    }
 
     /**
      * @dataProvider getDataForCreateFromNumberAndPrecision
@@ -36,11 +70,11 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
     public function getDataForCreateFromNumberAndPrecision()
     {
         return [
-            [new FloatNumber(12340, 2), '1234', 1, 2],
-            [new FloatNumber(123, 1), '1234', 2, 1],
-            [new FloatNumber(1235, 1), '12345', 2, 1],
-            [new FloatNumber(123, 0), '12345', 2, 0],
-            [new FloatNumber(12300, 2), '123', 0, 2],
+            [new FloatNumber(12340, 2), 1234, 1, 2],
+            [new FloatNumber(123, 1), 1234, 2, 1],
+            [new FloatNumber(1235, 1), 12345, 2, 1],
+            [new FloatNumber(123, 0), 12345, 2, 0],
+            [new FloatNumber(12300, 2), 123, 0, 2],
         ];
     }
 

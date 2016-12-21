@@ -23,9 +23,9 @@ class FloatNumberFactory
 
     /**
      * @param string $number
-     * @return FloatNumber
+     * @return FloatNumberInterface
      */
-    public function create(string $number): FloatNumber
+    public function create(string $number): FloatNumberInterface
     {
         $number = trim($number);
 
@@ -40,14 +40,25 @@ class FloatNumberFactory
     /**
      * @param int $number
      * @param int $precision
-     * @return FloatNumber
+     * @return FloatNumberInterface
      */
-    public function createFromNumberAndPrecision(int $number, int $precision): FloatNumber
+    public function createFromNumberAndPrecision(int $number, int $precision): FloatNumberInterface
     {
         return new FloatNumber(
             round($number * pow(10, $this->precisionProvider->getPrecision() - $precision)),
             $this->precisionProvider->getPrecision()
         );
+    }
+
+    /**
+     * @param int $number
+     * @param int $precision
+     * @param int $outputPrecision
+     * @return FloatNumberInterface
+     */
+    public function createWithGivenPrecision(int $number, int $precision, int $outputPrecision): FloatNumberInterface
+    {
+        return new FloatNumber(round($number * pow(10, $outputPrecision - $precision)), $outputPrecision);
     }
 
     /**
