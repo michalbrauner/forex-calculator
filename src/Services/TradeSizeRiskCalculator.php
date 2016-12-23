@@ -37,6 +37,11 @@ class TradeSizeRiskCalculator
     private $forexPriceFloatNumberFactory;
 
     /**
+     * @var FloatNumberFactory
+     */
+    private $riskRewardRatioFloatNumberFactory;
+
+    /**
      * @var FloatNumberMath
      */
     private $floatNumberMath;
@@ -47,6 +52,7 @@ class TradeSizeRiskCalculator
      * @param FloatNumberFactory $outputFloatNumberFactory
      * @param DataProviderInterface $forexDataProvider
      * @param FloatNumberFactory $forexPriceFloatNumberFactory
+     * @param FloatNumberFactory $riskRewardRatioFloatNumberFactory
      * @param FloatNumberMath $floatNumberMath
      */
     public function __construct(
@@ -55,6 +61,7 @@ class TradeSizeRiskCalculator
         FloatNumberFactory $outputFloatNumberFactory,
         DataProviderInterface $forexDataProvider,
         FloatNumberFactory $forexPriceFloatNumberFactory,
+        FloatNumberFactory $riskRewardRatioFloatNumberFactory,
         FloatNumberMath $floatNumberMath
     ) {
         $this->inputCurrency = $inputCurrency;
@@ -62,6 +69,7 @@ class TradeSizeRiskCalculator
         $this->outputFloatNumberFactory = $outputFloatNumberFactory;
         $this->forexDataProvider = $forexDataProvider;
         $this->forexPriceFloatNumberFactory = $forexPriceFloatNumberFactory;
+        $this->riskRewardRatioFloatNumberFactory = $riskRewardRatioFloatNumberFactory;
         $this->floatNumberMath = $floatNumberMath;
     }
 
@@ -72,7 +80,7 @@ class TradeSizeRiskCalculator
      */
     public function getLoss(Trade $trade, int $numberOfUnits): FloatNumberInterface
     {
-        $loss = $this->getLossInInputCurrency($trade, $numberOfUnits);
+        $loss = $this->getDifferenceInInputCurrency($trade->getInput(), $trade->getStopLoss(), $numberOfUnits);
 
         if (strcasecmp($this->inputCurrency, $this->outputCurrency) !== 0) {
             $loss = $this->getNumberInOutputCurrency($trade, $loss);
@@ -88,17 +96,32 @@ class TradeSizeRiskCalculator
      */
     public function getProfit(Trade $trade, int $numberOfUnits): FloatNumberInterface
     {
-        // @todo
+        $profit = $this->getDifferenceInInputCurrency($trade->getInput(), $trade->getProfitTarget(), $numberOfUnits);
+
+        if (strcasecmp($this->inputCurrency, $this->outputCurrency) !== 0) {
+            $profit = $this->getNumberInOutputCurrency($trade, $profit);
+        }
+
+        return $this->outputFloatNumberFactory->createFromNumber($profit);
     }
 
     /**
      * @param Trade $trade
-     * @param int $numberOfUnits
      * @return FloatNumberInterface
      */
-    public function getRiskRewardRatio(Trade $trade, int $numberOfUnits): FloatNumberInterface
+    public function getRiskRewardRatio(Trade $trade): FloatNumberInterface
     {
-        // @todo
+        $profit = $this->floatNumberMath->abs(
+            $this->floatNumberMath->sub($trade->getProfitTarget(), $trade->getInput())
+        );
+
+        $loss = $this->floatNumberMath->abs(
+            $this->floatNumberMath->sub($trade->getInput(), $trade->getStopLoss())
+        );
+
+        return $this->riskRewardRatioFloatNumberFactory->create(
+            (string)($profit->getNumber() / $loss->getNumber())
+        );
     }
 
     /**
@@ -121,14 +144,15 @@ class TradeSizeRiskCalculator
     }
 
     /**
-     * @param Trade $trade
+     * @param FloatNumberInterface $price1
+     * @param FloatNumberInterface $price2
      * @param int $numberOfUnits
      * @return FloatNumberInterface
      */
-    private function getLossInInputCurrency(Trade $trade, int $numberOfUnits): FloatNumberInterface
+    private function getDifferenceInInputCurrency(FloatNumberInterface $price1, FloatNumberInterface $price2, int $numberOfUnits): FloatNumberInterface
     {
         return $this->floatNumberMath->mul(
-            $this->floatNumberMath->abs($this->floatNumberMath->sub($trade->getInput(), $trade->getStopLoss())),
+            $this->floatNumberMath->abs($this->floatNumberMath->sub($price1, $price2)),
             $this->getNumberOfUnitsAsNumber($numberOfUnits)
         );
     }

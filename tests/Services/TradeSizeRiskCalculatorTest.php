@@ -8,6 +8,7 @@ use ForexCalculator\DataObjects\Trade;
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
 use ForexCalculator\PrecisionProviders\MoneyPrecisionProvider;
+use ForexCalculator\PrecisionProviders\RiskRewardRatioPrecisionProvider;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use ForexCalculator\Services\FloatNumberMath;
 use ForexCalculator\Services\TradeSizeRiskCalculator;
@@ -16,6 +17,92 @@ use PHPUnit_Framework_TestCase;
 
 class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @dataProvider dataForTestGetRiskRewardRatio
+     *
+     * @param FloatNumber $expectedRiskRewardRatio
+     * @param FloatNumber $input
+     * @param FloatNumber $profitTarget
+     * @param FloatNumber $stopLoss
+     */
+    public function testGetRiskRewardRatio(
+        FloatNumber $expectedRiskRewardRatio,
+        FloatNumber $input,
+        FloatNumber $profitTarget,
+        FloatNumber $stopLoss
+    ) {
+        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator('1', 4, false);
+
+        $trade = new Trade($input, $stopLoss, $profitTarget);
+        $riskRewardRatio = $tradeSizeRiskCalculator->getRiskRewardRatio($trade);
+
+        $this->assertEquals($expectedRiskRewardRatio, $riskRewardRatio);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataForTestGetRiskRewardRatio(): array
+    {
+        $riskRewardRatioNumberFactory = new FloatNumberFactory(new RiskRewardRatioPrecisionProvider());
+        $priceFloatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(3));
+
+        return [
+            [
+                $riskRewardRatioNumberFactory->create('1'),
+                $priceFloatNumberFactory->create('118.015'),
+                $priceFloatNumberFactory->create('118.017'),
+                $priceFloatNumberFactory->create('118.013'),
+            ],
+            [
+                $riskRewardRatioNumberFactory->create('1.33'),
+                $priceFloatNumberFactory->create('118.015'),
+                $priceFloatNumberFactory->create('118.019'),
+                $priceFloatNumberFactory->create('118.012'),
+            ],
+            [
+                $riskRewardRatioNumberFactory->create('0.33'),
+                $priceFloatNumberFactory->create('118.015'),
+                $priceFloatNumberFactory->create('118.016'),
+                $priceFloatNumberFactory->create('118.012'),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataForTestGetLoss
+     *
+     * @param FloatNumber $expectedLoss
+     * @param FloatNumber $input
+     * @param FloatNumber $profitTarget
+     * @param FloatNumber $stopLoss
+     * @param int $numberOfUnits
+     * @param string $forexDataProviderPrice
+     * @param int $forexDataPrecision
+     * @param bool $convertCurrency
+     */
+    public function testGetProfit(
+        FloatNumber $expectedLoss,
+        FloatNumber $input,
+        FloatNumber $profitTarget,
+        FloatNumber $stopLoss,
+        int $numberOfUnits,
+        string $forexDataProviderPrice,
+        int $forexDataPrecision,
+        bool $convertCurrency
+    ) {
+        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator(
+            $forexDataProviderPrice,
+            $forexDataPrecision,
+            $convertCurrency
+        );
+
+        $trade = new Trade($input, $stopLoss, $profitTarget);
+        $profit = $tradeSizeRiskCalculator->getProfit($trade, $numberOfUnits);
+
+        $this->assertEquals($expectedLoss, $profit);
+    }
 
     /**
      * @dataProvider dataForTestGetLoss
@@ -39,13 +126,10 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         int $forexDataPrecision,
         bool $convertCurrency
     ) {
-        $tradeSizeRiskCalculator = new TradeSizeRiskCalculator(
-            'someCurrency',
-            $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
-            new FloatNumberFactory(new MoneyPrecisionProvider()),
-            $this->getForexDataProvider($forexDataProviderPrice),
-            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),
-            new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
+        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator(
+            $forexDataProviderPrice,
+            $forexDataPrecision,
+            $convertCurrency
         );
 
         $trade = new Trade($input, $stopLoss, $profitTarget);
@@ -171,6 +255,29 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         $forexDataProvider->method('getPrice')->willReturn($price);
 
         return $forexDataProvider;
+    }
+
+    /**
+     * @param string $forexDataProviderPrice
+     * @param int $forexDataPrecision
+     * @param bool $convertCurrency
+     * @return TradeSizeRiskCalculator
+     */
+    private function getTradeSizeRiskCalculator(string $forexDataProviderPrice,
+        int $forexDataPrecision,
+        bool $convertCurrency
+    ): TradeSizeRiskCalculator {
+        $tradeSizeRiskCalculator = new TradeSizeRiskCalculator(
+            'someCurrency',
+            $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
+            new FloatNumberFactory(new MoneyPrecisionProvider()),
+            $this->getForexDataProvider($forexDataProviderPrice),
+            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),
+            new FloatNumberFactory(new RiskRewardRatioPrecisionProvider()),
+            new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
+        );
+
+        return $tradeSizeRiskCalculator;
     }
 
 }
