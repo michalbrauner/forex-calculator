@@ -11,7 +11,7 @@ use ForexCalculator\PrecisionProviders\MoneyPrecisionProvider;
 use ForexCalculator\PrecisionProviders\RiskRewardRatioPrecisionProvider;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use ForexCalculator\Services\FloatNumberMath;
-use ForexCalculator\Services\TradeSizeRiskCalculator;
+use ForexCalculator\Services\TradeAttributesByTradeSizeCalculator;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
@@ -261,13 +261,14 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
      * @param string $forexDataProviderPrice
      * @param int $forexDataPrecision
      * @param bool $convertCurrency
-     * @return TradeSizeRiskCalculator
+     * @return TradeAttributesByTradeSizeCalculator
      */
-    private function getTradeSizeRiskCalculator(string $forexDataProviderPrice,
+    private function getTradeSizeRiskCalculator(
+        string $forexDataProviderPrice,
         int $forexDataPrecision,
         bool $convertCurrency
-    ): TradeSizeRiskCalculator {
-        $tradeSizeRiskCalculator = new TradeSizeRiskCalculator(
+    ): TradeAttributesByTradeSizeCalculator {
+        $tradeSizeRiskCalculator = new TradeAttributesByTradeSizeCalculator(
             'someCurrency',
             $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
             new FloatNumberFactory(new MoneyPrecisionProvider()),

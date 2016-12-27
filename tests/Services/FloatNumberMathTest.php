@@ -7,10 +7,60 @@ use ForexCalculator\DataObjects\FloatNumberFactory;
 use ForexCalculator\DataObjects\FloatNumberInterface;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use ForexCalculator\Services\FloatNumberMath;
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
 class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 {
+
+    public function testDivSecondArgumentIsZeroNumber()
+    {
+        $floatNumber1 = new FloatNumber(100, 0);
+        $floatNumber2 = new FloatNumber(0, 0);
+
+        $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(0));
+        $floatNumberMath = new FloatNumberMath($floatNumberFactory);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid division. Second argument can\'t be zero.');
+
+        $floatNumberMath->div($floatNumber1, $floatNumber2);
+    }
+
+    /**
+     * @dataProvider getDataForDiv
+     *
+     * @param FloatNumberInterface $expectedNumber
+     * @param FloatNumberInterface $number1
+     * @param FloatNumberInterface $number2
+     * @param int $outputPrecision
+     */
+    public function testDiv(
+        FloatNumberInterface $expectedNumber,
+        FloatNumberInterface $number1,
+        FloatNumberInterface $number2,
+        int $outputPrecision
+    ) {
+        $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
+        $floatNumberMath = new FloatNumberMath($floatNumberFactory);
+        $this->assertEquals($expectedNumber, $floatNumberMath->div($number1, $number2));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataForDiv()
+    {
+        return [
+            [new FloatNumber(2, 0), new FloatNumber(6, 0), new FloatNumber(3, 0), 0],
+            [new FloatNumber(2000, 3), new FloatNumber(60, 1), new FloatNumber(300, 2), 3],
+            [new FloatNumber(50, 2), new FloatNumber(30, 1), new FloatNumber(600, 2), 2],
+            [new FloatNumber(7143, 4), new FloatNumber(5, 1), new FloatNumber(7, 1), 4],
+            [new FloatNumber(22, 1), new FloatNumber(510, 2), new FloatNumber(23, 1), 1],
+            [new FloatNumber(-22, 1), new FloatNumber(-510, 2), new FloatNumber(23, 1), 1],
+            [new FloatNumber(451, 3), new FloatNumber(23, 1), new FloatNumber(510, 2), 3],
+        ];
+    }
 
     /**
      * @dataProvider getDataForMul

@@ -4,6 +4,7 @@ namespace ForexCalculator\Services;
 
 use ForexCalculator\DataObjects\FloatNumberFactory;
 use ForexCalculator\DataObjects\FloatNumberInterface;
+use InvalidArgumentException;
 
 class FloatNumberMath
 {
@@ -44,6 +45,44 @@ class FloatNumberMath
             $floatNumber1->getNumber() * $floatNumber2->getNumber(),
             $floatNumber1->getPrecision() + $floatNumber2->getPrecision()
         );
+    }
+
+    /**
+     * @param FloatNumberInterface $floatNumber1
+     * @param FloatNumberInterface $floatNumber2
+     * @return FloatNumberInterface
+     */
+    public function div(FloatNumberInterface $floatNumber1, FloatNumberInterface $floatNumber2): FloatNumberInterface
+    {
+        if ($floatNumber2->getNumber() === 0) {
+            throw new InvalidArgumentException('Invalid division. Second argument can\'t be zero.');
+        }
+
+        $maxPrecision = max(
+            $floatNumber1->getPrecision(),
+            $floatNumber2->getPrecision(),
+            $this->floatNumberFactory->getPrecisionProvider()->getPrecision()
+        );
+
+        list($number1_normalized, $number2_normalized) = $this->getNormalizedNumbers(
+            $floatNumber1,
+            $floatNumber2,
+            $maxPrecision
+        );
+
+        $dividedNumber = $number1_normalized->getNumber() / $number2_normalized->getNumber();
+        $addedPrecisionToIntPart = round(
+            $dividedNumber * pow(
+                10,
+                $this->floatNumberFactory->getPrecisionProvider()->getPrecision()
+            )
+        );
+
+        $finalPrecision = $number1_normalized->getPrecision()
+            - $number2_normalized->getPrecision()
+            + $this->floatNumberFactory->getPrecisionProvider()->getPrecision();
+
+        return $this->floatNumberFactory->createFromNumberAndPrecision($addedPrecisionToIntPart, $finalPrecision);
     }
 
     /**

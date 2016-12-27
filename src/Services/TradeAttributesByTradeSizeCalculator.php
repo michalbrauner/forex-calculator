@@ -8,7 +8,7 @@ use ForexCalculator\DataObjects\Trade;
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 
-class TradeSizeRiskCalculator
+class TradeAttributesByTradeSizeCalculator
 {
 
     /**
