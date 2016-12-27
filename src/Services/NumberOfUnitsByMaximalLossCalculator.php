@@ -73,10 +73,15 @@ class NumberOfUnitsByMaximalLossCalculator
 
         $lossForOneLot = $tradeAttributesCalculator->getLoss($trade, self::NUMBER_OF_UNITS_IN_LOT);
 
-        $numberOfUnitsForMaximalRisk = $this->moneyFloatNumberMath->div($maximalRisk, $lossForOneLot);
+        $numberOfUnitsNumberFactory = $this->getNumberOfUnitsFloatNumberFactory();
+
+        $numberOfUnitsForMaximalRisk = $this->moneyFloatNumberMath->mul(
+            $this->moneyFloatNumberMath->div($maximalRisk, $lossForOneLot),
+            $numberOfUnitsNumberFactory->create((string)self::NUMBER_OF_UNITS_IN_LOT)
+        );
 
         return (int)round(
-            $this->getNumberOfUnitsFloatNumberFactory()
+            $numberOfUnitsNumberFactory
                 ->createFromNumber($numberOfUnitsForMaximalRisk)
                 ->getNumberAsFloat()
         );

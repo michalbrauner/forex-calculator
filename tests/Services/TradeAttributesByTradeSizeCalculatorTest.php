@@ -15,7 +15,7 @@ use ForexCalculator\Services\TradeAttributesByTradeSizeCalculator;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
+class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -32,7 +32,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         FloatNumber $profitTarget,
         FloatNumber $stopLoss
     ) {
-        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator('1', 4, false);
+        $tradeSizeRiskCalculator = $this->getCalculator('1', 4, false);
 
         $trade = new Trade($input, $stopLoss, $profitTarget);
         $riskRewardRatio = $tradeSizeRiskCalculator->getRiskRewardRatio($trade);
@@ -92,7 +92,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         int $forexDataPrecision,
         bool $convertCurrency
     ) {
-        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator(
+        $tradeSizeRiskCalculator = $this->getCalculator(
             $forexDataProviderPrice,
             $forexDataPrecision,
             $convertCurrency
@@ -126,7 +126,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
         int $forexDataPrecision,
         bool $convertCurrency
     ) {
-        $tradeSizeRiskCalculator = $this->getTradeSizeRiskCalculator(
+        $tradeSizeRiskCalculator = $this->getCalculator(
             $forexDataProviderPrice,
             $forexDataPrecision,
             $convertCurrency
@@ -263,12 +263,13 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
      * @param bool $convertCurrency
      * @return TradeAttributesByTradeSizeCalculator
      */
-    private function getTradeSizeRiskCalculator(
+    private function getCalculator(
         string $forexDataProviderPrice,
         int $forexDataPrecision,
         bool $convertCurrency
     ): TradeAttributesByTradeSizeCalculator {
-        $tradeSizeRiskCalculator = new TradeAttributesByTradeSizeCalculator(
+
+        $tradeAttributesCalculator = new TradeAttributesByTradeSizeCalculator(
             'someCurrency',
             $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
             new FloatNumberFactory(new MoneyPrecisionProvider()),
@@ -278,7 +279,7 @@ class TradeSizeRiskCalculatorTest extends PHPUnit_Framework_TestCase
             new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
         );
 
-        return $tradeSizeRiskCalculator;
+        return $tradeAttributesCalculator;
     }
 
 }
