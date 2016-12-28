@@ -6,6 +6,7 @@ php:
 before_script:
   - mkdir -p shippable/codecoverage
   - mkdir -p shippable/testresults
+  - composer install
 
 script:
  - phpunit --log-junit shippable/testresults/junit.xml --coverage-xml shippable/codecoverage --bootstrap vendor/autoload.php --configuration phpunit.xml tests
