@@ -1,4 +1,5 @@
 <?php
+
 namespace ForexCalculator\PrecisionProviders;
 
 interface PrecisionProviderInterface
