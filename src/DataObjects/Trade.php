@@ -73,7 +73,7 @@ class Trade
         FloatNumberInterface $input,
         FloatNumberInterface $stopLoss,
         FloatNumberInterface $profitTarget
-    ): void {
+    ) {
 
         if ($input->getPrecision() !== $stopLoss->getPrecision()
             || $stopLoss->getPrecision() !== $profitTarget->getPrecision()
