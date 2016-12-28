@@ -81,7 +81,7 @@ class FloatNumberFactory
     /**
      * @param string $number
      */
-    private function checkNumber(string $number): void
+    private function checkNumber(string $number)
     {
         if (!preg_match('/^[0-9]+([.]{1}[0-9]+){0,1}$/', $number)) {
             throw new InvalidArgumentException(
