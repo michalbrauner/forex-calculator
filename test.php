@@ -1,32 +1,13 @@
-[![Build Status](https://img.shields.io/shippable/5845d4e6307b1f0f004fb54d/master.svg)](https://app.shippable.com/projects/5845d4e6307b1f0f004fb54d/status/dashboard)
+<?php
 
-## About
+require_once('vendor/autoload.php');
 
-Forex-calculator is a library in order to make calculations related to Forex. It provides basic calculators that can be used to improve your money management.
-
-## Installation
-```
-composer install michalbrauner/forex-calculator
-```
-
-## Usage
-
-### Currency converter
-
-```php
-$currencyConverter = new \ForexCalculator\Services\CurrencyConverter(
-  new \ForexCalculator\DataProviders\YahooDataProvider(new \GuzzleHttp\Client())
-);
-
-# Convert 100 eur to usd
-
-$convertedValue = $currencyConverter->convertToCurrency('eur', 'usd', 100);
-```
-
-### Profit, loss and RRR calculator
-
-```php
-# Create calculator factory
+//$currencyConverter = new \ForexCalculator\Services\CurrencyConverter(
+//    new \ForexCalculator\DataProviders\YahooDataProvider(new \GuzzleHttp\Client())
+//);
+//
+//$eurValueInUsd = $currencyConverter->convertToCurrency('eur', 'usd', 100);
+//echo sprintf('100 eur is %.2f usd', $currencyConverter->convertToCurrency('eur', 'usd', 100));
 
 $tradeAttributesCalculatorFactory = new \ForexCalculator\Services\TradeAttributesByTradeSizeCalculatorFactory(
     new \ForexCalculator\DataProviders\YahooDataProvider(new \GuzzleHttp\Client()),
@@ -34,15 +15,11 @@ $tradeAttributesCalculatorFactory = new \ForexCalculator\Services\TradeAttribute
     new \ForexCalculator\PrecisionProviders\RiskRewardRatioPrecisionProvider()
 );
 
-# Calculator settings
-
 $symbol = 'eurusd';
 $outputCurrency = 'usd';
 $extendedPoint = true;
 
 $tradeAttributesCalculator = $tradeAttributesCalculatorFactory->create('eurusd', 'usd', $extendedPoint);
-
-# Factory to create prices to trade
 
 $priceNumberFactory = new \ForexCalculator\DataObjects\FloatNumberFactory(
     new \ForexCalculator\PrecisionProviders\PricePrecisionProvider($symbol, $extendedPoint)
@@ -54,18 +31,13 @@ $trade = new \ForexCalculator\DataObjects\Trade(
     $priceNumberFactory->create('1.04016')
 );
 
-# Loss and profit for trade and size 20000 units
-
 $loss = $tradeAttributesCalculator->getLoss($trade, 20000);
 $profit = $tradeAttributesCalculator->getProfit($trade, 20000);
-
 $riskRewardRatio = $tradeAttributesCalculator->getRiskRewardRatio($trade);
-```
 
-### Number of units by maximal risk calculator
-
-```php
-...
+printf("loss = %f\n", $loss->getNumberAsFloat());
+printf("profit = %f\n", $profit->getNumberAsFloat());
+printf("riskRewardRatio = %f\n", $riskRewardRatio->getNumberAsFloat());
 
 $numberOfUnitsCalculator = new \ForexCalculator\Services\NumberOfUnitsByMaximalLossCalculator(
     $symbol,
@@ -77,8 +49,7 @@ $numberOfUnitsCalculator = new \ForexCalculator\Services\NumberOfUnitsByMaximalL
 $moneyNumberFactory = new \ForexCalculator\DataObjects\FloatNumberFactory(
     new \ForexCalculator\PrecisionProviders\MoneyPrecisionProvider()
 );
-
-# Number of units to trade to risk 180 usd per trade
-
 $numberOfUnits = $numberOfUnitsCalculator->getNumberOfUnits($trade, $moneyNumberFactory->create('180'));
-```
+
+printf("numberOfUnits = %d\n", $numberOfUnits);
+
