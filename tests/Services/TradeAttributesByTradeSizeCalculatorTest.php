@@ -269,9 +269,12 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
         bool $convertCurrency
     ): TradeAttributesByTradeSizeCalculator {
 
+        $symbol = 'eurusd';
+        $outputCurrency = $convertCurrency ? 'nzd' : 'usd';
+
         $tradeAttributesCalculator = new TradeAttributesByTradeSizeCalculator(
-            'someCurrency',
-            $convertCurrency ? 'someOtherCurrency' : 'someCurrency',
+            $symbol,
+            $outputCurrency,
             new FloatNumberFactory(new MoneyPrecisionProvider()),
             $this->getForexDataProvider($forexDataProviderPrice),
             new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),

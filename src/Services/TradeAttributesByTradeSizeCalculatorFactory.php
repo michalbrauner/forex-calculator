@@ -41,19 +41,19 @@ class TradeAttributesByTradeSizeCalculatorFactory
     }
 
     /**
-     * @param string $inputCurrency
+     * @param string $symbol
      * @param string $outputCurrency
      * @param bool $extendedPoint
      * @return TradeAttributesByTradeSizeCalculator
      */
-    public function create(string $inputCurrency, string $outputCurrency, bool $extendedPoint)
+    public function create(string $symbol, string $outputCurrency, bool $extendedPoint)
     {
         $forexPriceFloatNumberFactory = new FloatNumberFactory(
-            new PricePrecisionProvider($inputCurrency . $outputCurrency, $extendedPoint)
+            new PricePrecisionProvider($symbol, $extendedPoint)
         );
 
         $tradeAttributesByTradeSizeCalculator = new TradeAttributesByTradeSizeCalculator(
-            $inputCurrency,
+            $symbol,
             $outputCurrency,
             new FloatNumberFactory($this->moneyPrecisionProvider),
             $this->forexDataProvider,

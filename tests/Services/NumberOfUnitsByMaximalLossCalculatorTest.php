@@ -169,8 +169,9 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
         bool $convertCurrency
     ): NumberOfUnitsByMaximalLossCalculator {
 
-        $inputCurrency = 'someCurrency';
-        $outputCurrency = $convertCurrency ? 'someOtherCurrency' : 'someCurrency';
+        $symbol = 'eurusd';
+        $outputCurrency = $convertCurrency ? 'nzd' : 'usd';
+
         $extendedPoint = false;
 
         $moneyFloatNumberFactory = new FloatNumberFactory(new MoneyPrecisionProvider());
@@ -178,17 +179,16 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
         $tradeAttributesCalculatorFactory = $this->getTradeAttributesCalculatorFactory(
             $forexDataProviderPrice,
             $forexDataPrecision,
-            $inputCurrency,
+            $symbol,
             $outputCurrency,
             $moneyFloatNumberFactory
         );
 
         return new NumberOfUnitsByMaximalLossCalculator(
-            $inputCurrency,
+            $symbol,
             $outputCurrency,
             $extendedPoint,
-            $tradeAttributesCalculatorFactory,
-            new FloatNumberMath($moneyFloatNumberFactory)
+            $tradeAttributesCalculatorFactory
         );
     }
 
@@ -211,20 +211,21 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
     /**
      * @param string $forexDataProviderPrice
      * @param int $forexDataPrecision
-     * @param $inputCurrency
+     * @param string $symbol
      * @param $outputCurrency
      * @param $moneyFloatNumberFactory
      * @return TradeAttributesByTradeSizeCalculatorFactory|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getTradeAttributesCalculatorFactory(string $forexDataProviderPrice,
+    private function getTradeAttributesCalculatorFactory(
+        string $forexDataProviderPrice,
         int $forexDataPrecision,
-        $inputCurrency,
+        string $symbol,
         $outputCurrency,
         $moneyFloatNumberFactory
     ): TradeAttributesByTradeSizeCalculatorFactory {
 
         $tradeAttributesCalculator = new TradeAttributesByTradeSizeCalculator(
-            $inputCurrency,
+            $symbol,
             $outputCurrency,
             $moneyFloatNumberFactory,
             $this->getForexDataProvider($forexDataProviderPrice),
