@@ -2,11 +2,11 @@
 
 ## About
 
-Forex-calculator is a library in order to make calculations related to Forex. It provides basic calculators that can be used to improve your money management. Library requires **PHP 7**.
+Forex-calculator is a library to make calculations related to Forex. It provides basic calculators that can be used to improve your money management. Library requires **PHP 7**.
 
 ## Installation
 ```
-composer install michalbrauner/forex-calculator:~v1.0
+composer install michalbrauner/forex-calculator:^v1.0
 ```
 
 ## Usage
