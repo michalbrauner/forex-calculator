@@ -6,7 +6,7 @@ Forex-calculator is a library in order to make calculations related to Forex. It
 
 ## Installation
 ```
-composer install michalbrauner/forex-calculator:~v1.0.0*
+composer install michalbrauner/forex-calculator:~v1.0
 ```
 
 ## Usage

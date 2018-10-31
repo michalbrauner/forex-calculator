@@ -12,9 +12,10 @@ use InvalidArgumentException;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-class YahooDataProviderTest extends PHPUnit_Framework_TestCase
+final class YahooDataProviderTest extends PHPUnit_Framework_TestCase
 {
-    public function testGetPriceInvalidPriceType()
+
+    public function testGetPriceInvalidPriceType(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -22,7 +23,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
         $dataProvider->getPrice('EURUSD', 'invalidPriceType');
     }
 
-    public function testGetPriceInvalidSymbol()
+    public function testGetPriceInvalidSymbol(): void
     {
         $this->expectException(PriceNotFoundException::class);
 
@@ -32,13 +33,12 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForGetTickValueForSymbol
-     *
      * @param string $expectedPrice
      * @param string $symbol
      * @param string $priceType
      * @param string $mockResponseFile
      */
-    public function testGetPrice($expectedPrice, $symbol, $priceType, $mockResponseFile)
+    public function testGetPrice($expectedPrice, $symbol, $priceType, $mockResponseFile): void
     {
         $response = file_get_contents($mockResponseFile);
 
@@ -46,10 +46,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPrice, $dataProvider->getPrice($symbol, $priceType));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForGetTickValueForSymbol()
+    public function getDataForGetTickValueForSymbol(): array
     {
         $eurUsdMockResponseFile = __DIR__ . '/YahooDataProviderData/eurusd_response.json';
         $eurJpyMockResponseFile = __DIR__ . '/YahooDataProviderData/eurjpy_response.json';
@@ -64,11 +61,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param string $response
-     * @return YahooDataProvider
-     */
-    private function getYahooDataProvider($response)
+    private function getYahooDataProvider(string $response): YahooDataProvider
     {
         return new YahooDataProvider($this->getMockHttpClient($response));
     }
@@ -77,7 +70,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
      * @param string $response
      * @return Client|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockHttpClient($response)
+    private function getMockHttpClient(string $response): Client
     {
         $mockRequest = $this->getMockRequest($this->getMockStream($response), 200);
 
@@ -95,7 +88,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
      * @param string $response
      * @return Stream|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockStream($response)
+    private function getMockStream(string $response): Stream
     {
         $mockStream = $this->getMockBuilder(Stream::class)
             ->setMethods(['getContents'])
@@ -112,7 +105,7 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
      * @param int $statusCode
      * @return Request|PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockRequest(Stream $mockStream, $statusCode)
+    private function getMockRequest(Stream $mockStream, int $statusCode): Request
     {
         $mockRequest = $this->getMockBuilder(Request::class)
             ->setMethods(['getBody', 'getStatusCode'])
@@ -124,4 +117,5 @@ class YahooDataProviderTest extends PHPUnit_Framework_TestCase
 
         return $mockRequest;
     }
+
 }

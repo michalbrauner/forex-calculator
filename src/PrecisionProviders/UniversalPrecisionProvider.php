@@ -2,7 +2,7 @@
 
 namespace ForexCalculator\PrecisionProviders;
 
-class UniversalPrecisionProvider implements PrecisionProviderInterface
+final class UniversalPrecisionProvider implements PrecisionProviderInterface
 {
 
     /**
@@ -10,17 +10,11 @@ class UniversalPrecisionProvider implements PrecisionProviderInterface
      */
     private $precision;
 
-    /**
-     * @param int $precision
-     */
     public function __construct(int $precision)
     {
         $this->precision = $precision;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getPrecision(): int
     {
         return $this->precision;

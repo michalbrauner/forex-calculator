@@ -11,8 +11,7 @@
   "type": "library",
   "authors": [
     {
-      "name": "Michal Brauner",
-      "homepage": "http://www.mbrauner.cz"
+      "name": "Michal Brauner"
     }
   ],
   "require-dev": {

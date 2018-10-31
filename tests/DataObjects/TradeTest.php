@@ -9,12 +9,11 @@ use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
-class TradeTest extends PHPUnit_Framework_TestCase
+final class TradeTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      * @dataProvider getDataForCreateTrade
-     *
      * @param string $expectedException
      * @param string $expectedExceptionMessage
      * @param FloatNumberInterface $input
@@ -27,17 +26,13 @@ class TradeTest extends PHPUnit_Framework_TestCase
         FloatNumberInterface $input,
         FloatNumberInterface $stopLoss,
         FloatNumberInterface $profitTarget
-    ) {
+    ): void {
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
         new Trade($input, $stopLoss, $profitTarget);
     }
 
-
-    /**
-     * @return array
-     */
-    public function getDataForCreateTrade()
+    public function getDataForCreateTrade(): array
     {
         $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(4));
         $floatNumberFactory2 = new FloatNumberFactory(new UniversalPrecisionProvider(5));

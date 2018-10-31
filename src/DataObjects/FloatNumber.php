@@ -2,7 +2,7 @@
 
 namespace ForexCalculator\DataObjects;
 
-class FloatNumber implements FloatNumberInterface
+final class FloatNumber implements FloatNumberInterface
 {
 
     /**
@@ -15,35 +15,22 @@ class FloatNumber implements FloatNumberInterface
      */
     private $precision;
 
-    /**
-     * @param int $number
-     * @param int $precision
-     */
     public function __construct(int $number, int $precision)
     {
         $this->number = $number;
         $this->precision = $precision;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getNumber(): int
     {
         return $this->number;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getPrecision(): int
     {
         return $this->precision;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getNumberAsFloat(): float
     {
         return $this->number / pow(10, $this->getPrecision());

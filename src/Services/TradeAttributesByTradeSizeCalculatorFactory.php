@@ -7,7 +7,7 @@ use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\PrecisionProviders\PrecisionProviderInterface;
 use ForexCalculator\PrecisionProviders\PricePrecisionProvider;
 
-class TradeAttributesByTradeSizeCalculatorFactory
+final class TradeAttributesByTradeSizeCalculatorFactory
 {
 
     /**
@@ -25,11 +25,6 @@ class TradeAttributesByTradeSizeCalculatorFactory
      */
     private $riskRewardRatioPrecisionProvider;
 
-    /**
-     * @param DataProviderInterface $forexDataProvider
-     * @param PrecisionProviderInterface $moneyPrecisionProvider
-     * @param PrecisionProviderInterface $riskRewardRatioPrecisionProvider
-     */
     public function __construct(
         DataProviderInterface $forexDataProvider,
         PrecisionProviderInterface $moneyPrecisionProvider,
@@ -40,12 +35,6 @@ class TradeAttributesByTradeSizeCalculatorFactory
         $this->riskRewardRatioPrecisionProvider = $riskRewardRatioPrecisionProvider;
     }
 
-    /**
-     * @param string $symbol
-     * @param string $outputCurrency
-     * @param bool $extendedPoint
-     * @return TradeAttributesByTradeSizeCalculator
-     */
     public function create(string $symbol, string $outputCurrency, bool $extendedPoint)
     {
         $forexPriceFloatNumberFactory = new FloatNumberFactory(

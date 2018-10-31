@@ -2,7 +2,7 @@
 
 namespace ForexCalculator\PrecisionProviders;
 
-class PricePrecisionProvider implements PrecisionProviderInterface
+final class PricePrecisionProvider implements PrecisionProviderInterface
 {
 
     const BASE_PRECISION_WITHOUT_JPY = 4;
@@ -18,19 +18,12 @@ class PricePrecisionProvider implements PrecisionProviderInterface
      */
     private $extendedPoint;
 
-    /**
-     * @param string $symbol
-     * @param bool $extendedPoint
-     */
     public function __construct(string $symbol, bool $extendedPoint)
     {
         $this->symbol = $symbol;
         $this->extendedPoint = $extendedPoint;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getPrecision(): int
     {
         $basePrecision = $this->containsJpy($this->symbol)
@@ -40,10 +33,6 @@ class PricePrecisionProvider implements PrecisionProviderInterface
         return $this->extendedPoint ? $basePrecision + 1 : $basePrecision;
     }
 
-    /**
-     * @param string $symbol
-     * @return bool
-     */
     private function containsJpy(string $symbol): bool
     {
         return stripos($symbol, 'jpy') !== false;

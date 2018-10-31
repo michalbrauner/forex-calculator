@@ -9,12 +9,11 @@ use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
-class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
+final class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      * @dataProvider getDataForCreateWithGivenPrecision
-     *
      * @param FloatNumberInterface $expectedNumber
      * @param int $number
      * @param int $numberPrecision
@@ -25,7 +24,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         int $number,
         int $numberPrecision,
         int $outputPrecision
-    ) {
+    ): void {
         $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(0));
         $this->assertEquals(
             $expectedNumber,
@@ -33,10 +32,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForCreateWithGivenPrecision()
+    public function getDataForCreateWithGivenPrecision(): array
     {
         return [
             [new FloatNumber(12340, 2), 1234, 1, 2],
@@ -47,7 +43,6 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForCreateFromNumberAndPrecision
-     *
      * @param FloatNumber $expectedNumber
      * @param int $number
      * @param int $numberPrecision
@@ -58,7 +53,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         int $number,
         int $numberPrecision,
         int $outputPrecision
-    ) {
+    ): void {
         $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $this->assertEquals($expectedNumber, $numberFactory->createFromNumberAndPrecision($number, $numberPrecision));
         $this->assertEquals(
@@ -67,10 +62,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForCreateFromNumberAndPrecision()
+    public function getDataForCreateFromNumberAndPrecision(): array
     {
         return [
             [new FloatNumber(12340, 2), 1234, 1, 2],
@@ -83,10 +75,9 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForCreateWithInvalidNumberThrownException
-     *
      * @param string $number
      */
-    public function testCreateWithInvalidNumberThrownException(string $number)
+    public function testCreateWithInvalidNumberThrownException(string $number): void
     {
         $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider(1));
 
@@ -98,10 +89,7 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
         $numberFactory->create($number);
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForCreateWithInvalidNumberThrownException()
+    public function getDataForCreateWithInvalidNumberThrownException(): array
     {
         return [
             [''],
@@ -113,21 +101,17 @@ class FloatNumberFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForCreate
-     *
      * @param FloatNumber $expectedNumber
      * @param string $number
      * @param int $precision
      */
-    public function testCreate(FloatNumber $expectedNumber, string $number, int $precision)
+    public function testCreate(FloatNumber $expectedNumber, string $number, int $precision): void
     {
         $numberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($precision));
         $this->assertEquals($expectedNumber, $numberFactory->create($number));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForCreate()
+    public function getDataForCreate(): array
     {
         return [
             [new FloatNumber(1234, 1), '123.4', 1],

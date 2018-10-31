@@ -15,12 +15,11 @@ use ForexCalculator\Services\TradeAttributesByTradeSizeCalculator;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCase
+final class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      * @dataProvider dataForTestGetRiskRewardRatio
-     *
      * @param FloatNumber $expectedRiskRewardRatio
      * @param FloatNumber $input
      * @param FloatNumber $profitTarget
@@ -31,7 +30,7 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
         FloatNumber $input,
         FloatNumber $profitTarget,
         FloatNumber $stopLoss
-    ) {
+    ): void {
         $tradeSizeRiskCalculator = $this->getCalculator('1', 4, false);
 
         $trade = new Trade($input, $stopLoss, $profitTarget);
@@ -41,8 +40,49 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
     }
 
     /**
-     * @return array
+     * @param string $forexDataProviderPrice
+     * @param int $forexDataPrecision
+     * @param bool $convertCurrency
+     * @return TradeAttributesByTradeSizeCalculator
      */
+    private function getCalculator(
+        string $forexDataProviderPrice,
+        int $forexDataPrecision,
+        bool $convertCurrency
+    ): TradeAttributesByTradeSizeCalculator {
+
+        $symbol = 'eurusd';
+        $outputCurrency = $convertCurrency ? 'nzd' : 'usd';
+
+        $tradeAttributesCalculator = new TradeAttributesByTradeSizeCalculator(
+            $symbol,
+            $outputCurrency,
+            new FloatNumberFactory(new MoneyPrecisionProvider()),
+            $this->getForexDataProvider($forexDataProviderPrice),
+            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),
+            new FloatNumberFactory(new RiskRewardRatioPrecisionProvider()),
+            new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
+        );
+
+        return $tradeAttributesCalculator;
+    }
+
+    /**
+     * @param string $price
+     * @return DataProviderInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getForexDataProvider(string $price): DataProviderInterface
+    {
+        $forexDataProvider = $this->getMockBuilder(YahooDataProvider::class)
+            ->setMethods(['getPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $forexDataProvider->method('getPrice')->willReturn($price);
+
+        return $forexDataProvider;
+    }
+
     public function dataForTestGetRiskRewardRatio(): array
     {
         $riskRewardRatioNumberFactory = new FloatNumberFactory(new RiskRewardRatioPrecisionProvider());
@@ -72,7 +112,6 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
 
     /**
      * @dataProvider dataForTestGetLoss
-     *
      * @param FloatNumber $expectedLoss
      * @param FloatNumber $input
      * @param FloatNumber $profitTarget
@@ -91,7 +130,7 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
         string $forexDataProviderPrice,
         int $forexDataPrecision,
         bool $convertCurrency
-    ) {
+    ): void {
         $tradeSizeRiskCalculator = $this->getCalculator(
             $forexDataProviderPrice,
             $forexDataPrecision,
@@ -106,7 +145,6 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
 
     /**
      * @dataProvider dataForTestGetLoss
-     *
      * @param FloatNumber $expectedLoss
      * @param FloatNumber $input
      * @param FloatNumber $stopLoss
@@ -125,7 +163,7 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
         string $forexDataProviderPrice,
         int $forexDataPrecision,
         bool $convertCurrency
-    ) {
+    ): void {
         $tradeSizeRiskCalculator = $this->getCalculator(
             $forexDataProviderPrice,
             $forexDataPrecision,
@@ -138,9 +176,6 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
         $this->assertEquals($expectedLoss, $loss);
     }
 
-    /**
-     * @return array
-     */
     public function dataForTestGetLoss(): array
     {
         $moneyNumberFactory = new FloatNumberFactory(new MoneyPrecisionProvider());
@@ -239,50 +274,6 @@ class TradeAttributesByTradeSizeCalculatorTest extends PHPUnit_Framework_TestCas
                 true,
             ],
         ];
-    }
-
-    /**
-     * @param string $price
-     * @return DataProviderInterface|PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getForexDataProvider(string $price): DataProviderInterface
-    {
-        $forexDataProvider = $this->getMockBuilder(YahooDataProvider::class)
-            ->setMethods(['getPrice'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $forexDataProvider->method('getPrice')->willReturn($price);
-
-        return $forexDataProvider;
-    }
-
-    /**
-     * @param string $forexDataProviderPrice
-     * @param int $forexDataPrecision
-     * @param bool $convertCurrency
-     * @return TradeAttributesByTradeSizeCalculator
-     */
-    private function getCalculator(
-        string $forexDataProviderPrice,
-        int $forexDataPrecision,
-        bool $convertCurrency
-    ): TradeAttributesByTradeSizeCalculator {
-
-        $symbol = 'eurusd';
-        $outputCurrency = $convertCurrency ? 'nzd' : 'usd';
-
-        $tradeAttributesCalculator = new TradeAttributesByTradeSizeCalculator(
-            $symbol,
-            $outputCurrency,
-            new FloatNumberFactory(new MoneyPrecisionProvider()),
-            $this->getForexDataProvider($forexDataProviderPrice),
-            new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)),
-            new FloatNumberFactory(new RiskRewardRatioPrecisionProvider()),
-            new FloatNumberMath(new FloatNumberFactory(new UniversalPrecisionProvider($forexDataPrecision)))
-        );
-
-        return $tradeAttributesCalculator;
     }
 
 }

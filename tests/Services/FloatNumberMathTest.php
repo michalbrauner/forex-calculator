@@ -10,10 +10,10 @@ use ForexCalculator\Services\FloatNumberMath;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
-class FloatNumberMathTest extends PHPUnit_Framework_TestCase
+final class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testDivSecondArgumentIsZeroNumber()
+    public function testDivSecondArgumentIsZeroNumber(): void
     {
         $floatNumber1 = new FloatNumber(100, 0);
         $floatNumber2 = new FloatNumber(0, 0);
@@ -29,7 +29,6 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForDiv
-     *
      * @param FloatNumberInterface $expectedNumber
      * @param FloatNumberInterface $number1
      * @param FloatNumberInterface $number2
@@ -40,16 +39,13 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
         FloatNumberInterface $number1,
         FloatNumberInterface $number2,
         int $outputPrecision
-    ) {
+    ): void {
         $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $floatNumberMath = new FloatNumberMath($floatNumberFactory);
         $this->assertEquals($expectedNumber, $floatNumberMath->div($number1, $number2));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForDiv()
+    public function getDataForDiv(): array
     {
         return [
             [new FloatNumber(2, 0), new FloatNumber(6, 0), new FloatNumber(3, 0), 0],
@@ -64,7 +60,6 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForMul
-     *
      * @param FloatNumberInterface $expectedNumber
      * @param FloatNumberInterface $number1
      * @param FloatNumberInterface $number2
@@ -75,16 +70,13 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
         FloatNumberInterface $number1,
         FloatNumberInterface $number2,
         int $outputPrecision
-    ) {
+    ): void {
         $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $floatNumberMath = new FloatNumberMath($floatNumberFactory);
         $this->assertEquals($expectedNumber, $floatNumberMath->mul($number1, $number2));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForMul()
+    public function getDataForMul(): array
     {
         return [
             [new FloatNumber(6, 0), new FloatNumber(2, 0), new FloatNumber(3, 0), 0],
@@ -97,7 +89,7 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testAbs()
+    public function testAbs(): void
     {
         $expectedNumber = new FloatNumber(10050, 2);
 
@@ -110,7 +102,6 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForSub
-     *
      * @param FloatNumberInterface $expectedNumber
      * @param FloatNumberInterface $number1
      * @param FloatNumberInterface $number2
@@ -121,16 +112,13 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
         FloatNumberInterface $number1,
         FloatNumberInterface $number2,
         int $outputPrecision
-    ) {
+    ): void {
         $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $floatNumberMath = new FloatNumberMath($floatNumberFactory);
         $this->assertEquals($expectedNumber, $floatNumberMath->sub($number1, $number2));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForSub()
+    public function getDataForSub(): array
     {
         return [
             [
@@ -168,22 +156,18 @@ class FloatNumberMathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForAdd
-     *
      * @param FloatNumberInterface $expectedNumber
      * @param FloatNumberInterface[] $floatNumbersToSum
      * @param int $outputPrecision
      */
-    public function testAdd(FloatNumberInterface $expectedNumber, array $floatNumbersToSum, int $outputPrecision)
+    public function testAdd(FloatNumberInterface $expectedNumber, array $floatNumbersToSum, int $outputPrecision): void
     {
         $floatNumberFactory = new FloatNumberFactory(new UniversalPrecisionProvider($outputPrecision));
         $floatNumberMath = new FloatNumberMath($floatNumberFactory);
         $this->assertEquals($expectedNumber, $floatNumberMath->add($floatNumbersToSum));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForAdd()
+    public function getDataForAdd(): array
     {
         return [
             [

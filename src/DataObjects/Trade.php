@@ -4,7 +4,7 @@ namespace ForexCalculator\DataObjects;
 
 use InvalidArgumentException;
 
-class Trade
+final class Trade
 {
 
     /**
@@ -22,12 +22,6 @@ class Trade
      */
     private $profitTarget;
 
-    /**
-     * @param FloatNumberInterface $input
-     * @param FloatNumberInterface $stopLoss
-     * @param FloatNumberInterface $profitTarget
-     * @internal param string $symbol
-     */
     public function __construct(
         FloatNumberInterface $input,
         FloatNumberInterface $stopLoss,
@@ -40,35 +34,6 @@ class Trade
         $this->profitTarget = $profitTarget;
     }
 
-    /**
-     * @return FloatNumberInterface
-     */
-    public function getInput(): FloatNumberInterface
-    {
-        return $this->input;
-    }
-
-    /**
-     * @return FloatNumberInterface
-     */
-    public function getStopLoss(): FloatNumberInterface
-    {
-        return $this->stopLoss;
-    }
-
-    /**
-     * @return FloatNumberInterface
-     */
-    public function getProfitTarget(): FloatNumberInterface
-    {
-        return $this->profitTarget;
-    }
-
-    /**
-     * @param FloatNumberInterface $input
-     * @param FloatNumberInterface $stopLoss
-     * @param FloatNumberInterface $profitTarget
-     */
     private function checkInputData(
         FloatNumberInterface $input,
         FloatNumberInterface $stopLoss,
@@ -83,14 +48,35 @@ class Trade
             );
         }
 
-        if (
-            ($input->getNumber() > $profitTarget->getNumber() && $input->getNumber() > $stopLoss->getNumber())
-            || ($input->getNumber() < $profitTarget->getNumber() && $input->getNumber() < $stopLoss->getNumber())
-        ) {
+        if ($this->tradeContainsValidNumbers($input, $stopLoss, $profitTarget)) {
             throw new InvalidArgumentException(
                 'Invalid input, stopLoss and profitTarget. Input has to be between stopLoss and profitTarget.'
             );
         }
+    }
+
+    private function tradeContainsValidNumbers(
+        FloatNumberInterface $input,
+        FloatNumberInterface $stopLoss,
+        FloatNumberInterface $profitTarget
+    ): bool {
+        return ($input->getNumber() > $profitTarget->getNumber() && $input->getNumber() > $stopLoss->getNumber())
+            || ($input->getNumber() < $profitTarget->getNumber() && $input->getNumber() < $stopLoss->getNumber());
+    }
+
+    public function getInput(): FloatNumberInterface
+    {
+        return $this->input;
+    }
+
+    public function getStopLoss(): FloatNumberInterface
+    {
+        return $this->stopLoss;
+    }
+
+    public function getProfitTarget(): FloatNumberInterface
+    {
+        return $this->profitTarget;
     }
 
 }

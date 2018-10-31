@@ -15,13 +15,13 @@ use ForexCalculator\Services\NumberOfUnitsByMaximalLossCalculator;
 use ForexCalculator\Services\TradeAttributesByTradeSizeCalculator;
 use ForexCalculator\Services\TradeAttributesByTradeSizeCalculatorFactory;
 use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit_Framework_TestCase;
 
-class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCase
+final class NumberOfUnitsByMaximalLossCalculatorTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      * @dataProvider getDataForGetNumberOfUnits
-     *
      * @param int $expectedNumberOfUnits
      * @param FloatNumber $input
      * @param FloatNumber $stopLoss
@@ -40,7 +40,7 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
         string $forexDataProviderPrice,
         int $forexDataPrecision,
         bool $convertCurrency
-    ) {
+    ): void {
 
         $Calculator = $this->getCalculator(
             $forexDataProviderPrice,
@@ -54,10 +54,7 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
         $this->assertEquals($expectedNumberOfUnits, $numberOfUnits);
     }
 
-    /**
-     * @return array
-     */
-    public function getDataForGetNumberOfUnits()
+    public function getDataForGetNumberOfUnits(): array
     {
         $moneyNumberFactory = new FloatNumberFactory(new MoneyPrecisionProvider());
         $priceFloatNumberFactoryJpy = new FloatNumberFactory(new UniversalPrecisionProvider(3));
@@ -157,12 +154,6 @@ class NumberOfUnitsByMaximalLossCalculatorTest extends \PHPUnit_Framework_TestCa
         ];
     }
 
-    /**
-     * @param string $forexDataProviderPrice
-     * @param int $forexDataPrecision
-     * @param bool $convertCurrency
-     * @return NumberOfUnitsByMaximalLossCalculator
-     */
     private function getCalculator(
         string $forexDataProviderPrice,
         int $forexDataPrecision,

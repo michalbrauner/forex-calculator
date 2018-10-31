@@ -7,7 +7,7 @@ use ForexCalculator\DataObjects\FloatNumberInterface;
 use ForexCalculator\DataObjects\Trade;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 
-class NumberOfUnitsByMaximalLossCalculator
+final class NumberOfUnitsByMaximalLossCalculator
 {
 
     const NUMBER_OF_UNITS_IN_LOT = 100000;
@@ -32,12 +32,6 @@ class NumberOfUnitsByMaximalLossCalculator
      */
     private $tradeAttributesByTradeSizeCalculatorFactory;
 
-    /**
-     * @param string $symbol
-     * @param string $outputCurrency
-     * @param bool $extendedPoint
-     * @param TradeAttributesByTradeSizeCalculatorFactory $tradeAttributesByTradeSizeCalculatorFactory
-     */
     public function __construct(
         string $symbol,
         string $outputCurrency,
@@ -50,11 +44,6 @@ class NumberOfUnitsByMaximalLossCalculator
         $this->tradeAttributesByTradeSizeCalculatorFactory = $tradeAttributesByTradeSizeCalculatorFactory;
     }
 
-    /**
-     * @param Trade $trade
-     * @param FloatNumberInterface $maximalRisk
-     * @return int
-     */
     public function getNumberOfUnits(Trade $trade, FloatNumberInterface $maximalRisk): int
     {
         $tradeAttributesCalculator = $this->tradeAttributesByTradeSizeCalculatorFactory->create(
@@ -80,9 +69,6 @@ class NumberOfUnitsByMaximalLossCalculator
         );
     }
 
-    /**
-     * @return FloatNumberMath
-     */
     private function getNumberOfUnitsFloatNumberMath(): FloatNumberMath
     {
         return new FloatNumberMath(
@@ -90,9 +76,6 @@ class NumberOfUnitsByMaximalLossCalculator
         );
     }
 
-    /**
-     * @return FloatNumberFactory
-     */
     private function getNumberOfUnitsRoundedFloatNumberFactory(): FloatNumberFactory
     {
         return new FloatNumberFactory(new UniversalPrecisionProvider(0));

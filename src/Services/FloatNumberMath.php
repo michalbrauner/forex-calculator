@@ -6,7 +6,7 @@ use ForexCalculator\DataObjects\FloatNumberFactory;
 use ForexCalculator\DataObjects\FloatNumberInterface;
 use InvalidArgumentException;
 
-class FloatNumberMath
+final class FloatNumberMath
 {
 
     /**
@@ -22,10 +22,6 @@ class FloatNumberMath
         $this->floatNumberFactory = $floatNumberFactory;
     }
 
-    /**
-     * @param FloatNumberInterface $floatNumber
-     * @return FloatNumberInterface
-     */
     public function abs(FloatNumberInterface $floatNumber): FloatNumberInterface
     {
         return $this->floatNumberFactory->createFromNumberAndPrecision(
@@ -34,11 +30,6 @@ class FloatNumberMath
         );
     }
 
-    /**
-     * @param FloatNumberInterface $floatNumber1
-     * @param FloatNumberInterface $floatNumber2
-     * @return FloatNumberInterface
-     */
     public function mul(FloatNumberInterface $floatNumber1, FloatNumberInterface $floatNumber2): FloatNumberInterface
     {
         return $this->floatNumberFactory->createFromNumberAndPrecision(
@@ -47,11 +38,6 @@ class FloatNumberMath
         );
     }
 
-    /**
-     * @param FloatNumberInterface $floatNumber1
-     * @param FloatNumberInterface $floatNumber2
-     * @return FloatNumberInterface
-     */
     public function div(FloatNumberInterface $floatNumber1, FloatNumberInterface $floatNumber2): FloatNumberInterface
     {
         if ($floatNumber2->getNumber() === 0) {
@@ -71,8 +57,8 @@ class FloatNumberMath
         );
 
         $dividedNumber = $number1_normalized->getNumber() / $number2_normalized->getNumber();
-        $addedPrecisionToIntPart = round(
-            $dividedNumber * pow(
+        $addedPrecisionToIntPart = \round(
+            $dividedNumber * \pow(
                 10,
                 $this->floatNumberFactory->getPrecisionProvider()->getPrecision()
             )
@@ -91,7 +77,7 @@ class FloatNumberMath
      */
     public function add(array $floatNumbers): FloatNumberInterface
     {
-        $numberOfFloatNumbers = count($floatNumbers);
+        $numberOfFloatNumbers = \count($floatNumbers);
 
         if ($numberOfFloatNumbers <= 1) {
             return $this->floatNumberFactory->createFromNumberAndPrecision(

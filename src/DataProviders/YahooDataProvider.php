@@ -4,6 +4,7 @@ namespace ForexCalculator\DataProviders;
 
 use ForexCalculator\Exceptions\PriceNotFoundException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
@@ -18,28 +19,29 @@ class YahooDataProvider implements DataProviderInterface
      */
     private $httpClient;
 
-    /**
-     * @param Client $httpClient
-     */
     public function __construct(Client $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @inheritdoc
+     * @param string $symbol
+     * @param string $priceType
+     * @return string
+     * @throws GuzzleException
+     * @throws PriceNotFoundException
      */
-    public function getPrice(string $symbol, string $priceType)
+    public function getPrice(string $symbol, string $priceType): string
     {
-        if (!in_array($priceType, array(self::PRICE_ASK, self::PRICE_BID), true)) {
+        if (!\in_array($priceType, array(self::PRICE_ASK, self::PRICE_BID), true)) {
             throw new InvalidArgumentException("Argument priceType has invalid value ('{$priceType}')");
         }
 
-        $yqlQuery = sprintf('select * from yahoo.finance.xchange where pair = \'%s\'', $symbol);
+        $yqlQuery = \sprintf('select * from yahoo.finance.xchange where pair = \'%s\'', $symbol);
         $data = $this->yahooApiQuery($yqlQuery);
 
         if ($data === null) {
-            throw new PriceNotFoundException(sprintf('Couldn\'t get price for symbol \'%s\'', $symbol));
+            throw new PriceNotFoundException(\sprintf('Couldn\'t get price for symbol \'%s\'', $symbol));
         }
 
         return $priceType === self::PRICE_ASK
@@ -50,10 +52,11 @@ class YahooDataProvider implements DataProviderInterface
     /**
      * @param string $query
      * @return stdClass|null
+     * @throws GuzzleException
      */
-    private function yahooApiQuery(string $query)
+    private function yahooApiQuery(string $query): ?stdClass
     {
-        $url = sprintf(
+        $url = \sprintf(
             '%s?q=%s&env=store://datatables.org/alltableswithkeys&format=json',
             self::YAHOO_FINANCE_API_URL,
             urlencode($query)
@@ -63,7 +66,7 @@ class YahooDataProvider implements DataProviderInterface
 
         if ($response->getStatusCode() === 200) {
             $content = $response->getBody()->getContents();
-            $data = json_decode($content);
+            $data = \json_decode($content);
 
             if ($data !== null && $data->query->results !== null) {
                 return $data;
@@ -72,7 +75,7 @@ class YahooDataProvider implements DataProviderInterface
             return null;
         }
 
-        throw new RuntimeException(sprintf('Yahoo API query failed: \'%s\'', $query));
+        throw new RuntimeException(\sprintf('Yahoo API query failed: \'%s\'', $query));
     }
 
 }

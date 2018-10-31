@@ -8,7 +8,7 @@ use ForexCalculator\DataObjects\Trade;
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\PrecisionProviders\UniversalPrecisionProvider;
 
-class TradeAttributesByTradeSizeCalculator
+final class TradeAttributesByTradeSizeCalculator
 {
 
     /**
@@ -46,15 +46,6 @@ class TradeAttributesByTradeSizeCalculator
      */
     private $floatNumberMath;
 
-    /**
-     * @param string $symbol
-     * @param string $outputCurrency
-     * @param FloatNumberFactory $outputFloatNumberFactory
-     * @param DataProviderInterface $forexDataProvider
-     * @param FloatNumberFactory $forexPriceFloatNumberFactory
-     * @param FloatNumberFactory $riskRewardRatioFloatNumberFactory
-     * @param FloatNumberMath $floatNumberMath
-     */
     public function __construct(
         string $symbol,
         string $outputCurrency,
@@ -73,11 +64,6 @@ class TradeAttributesByTradeSizeCalculator
         $this->floatNumberMath = $floatNumberMath;
     }
 
-    /**
-     * @param Trade $trade
-     * @param int $numberOfUnits
-     * @return FloatNumberInterface
-     */
     public function getLoss(Trade $trade, int $numberOfUnits): FloatNumberInterface
     {
         $loss = $this->getNumberInOutputCurrency(
@@ -88,11 +74,6 @@ class TradeAttributesByTradeSizeCalculator
         return $this->outputFloatNumberFactory->createFromNumber($loss);
     }
 
-    /**
-     * @param Trade $trade
-     * @param int $numberOfUnits
-     * @return FloatNumberInterface
-     */
     public function getProfit(Trade $trade, int $numberOfUnits): FloatNumberInterface
     {
         $profit = $this->getNumberInOutputCurrency(
@@ -103,10 +84,6 @@ class TradeAttributesByTradeSizeCalculator
         return $this->outputFloatNumberFactory->createFromNumber($profit);
     }
 
-    /**
-     * @param Trade $trade
-     * @return FloatNumberInterface
-     */
     public function getRiskRewardRatio(Trade $trade): FloatNumberInterface
     {
         $profit = $this->floatNumberMath->abs(
@@ -122,10 +99,6 @@ class TradeAttributesByTradeSizeCalculator
         );
     }
 
-    /**
-     * @param Trade $trade
-     * @return string
-     */
     private function getPriceTypeToFind(Trade $trade): string
     {
         return $trade->getInput()->getNumber() > $trade->getStopLoss()->getNumber()
@@ -133,12 +106,6 @@ class TradeAttributesByTradeSizeCalculator
             : DataProviderInterface::PRICE_BID;
     }
 
-    /**
-     * @param FloatNumberInterface $price1
-     * @param FloatNumberInterface $price2
-     * @param int $numberOfUnits
-     * @return FloatNumberInterface
-     */
     private function getDifferenceInInputCurrency(
         FloatNumberInterface $price1,
         FloatNumberInterface $price2,
@@ -151,14 +118,9 @@ class TradeAttributesByTradeSizeCalculator
         );
     }
 
-    /**
-     * @param Trade $trade
-     * @param FloatNumberInterface $loss
-     * @return FloatNumberInterface
-     */
     private function getNumberInOutputCurrency(Trade $trade, FloatNumberInterface $loss): FloatNumberInterface
     {
-        $inputCurrency = substr($this->symbol, -3);
+        $inputCurrency = \substr($this->symbol, -3);
 
         if ($inputCurrency === $this->outputCurrency) {
             return $loss;
@@ -174,10 +136,6 @@ class TradeAttributesByTradeSizeCalculator
         return $this->floatNumberMath->mul($loss, $this->forexPriceFloatNumberFactory->create($rateAsString));
     }
 
-    /**
-     * @param int $number
-     * @return FloatNumberInterface
-     */
     private function getIntAsFloatNumber(int $number): FloatNumberInterface
     {
         return (new FloatNumberFactory(new UniversalPrecisionProvider(0)))->create((string)$number);

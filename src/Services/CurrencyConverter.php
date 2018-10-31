@@ -4,8 +4,10 @@ namespace ForexCalculator\Services;
 
 use ForexCalculator\DataProviders\DataProviderInterface;
 use ForexCalculator\DataProviders\YahooDataProvider;
+use ForexCalculator\Exceptions\PriceNotFoundException;
+use GuzzleHttp\Exception\GuzzleException;
 
-class CurrencyConverter
+final class CurrencyConverter
 {
 
     const ROUND_TO_PRECISION = 2;
@@ -15,9 +17,6 @@ class CurrencyConverter
      */
     private $yahooDataProvider;
 
-    /**
-     * @param YahooDataProvider $yahooDataProvider
-     */
     public function __construct(YahooDataProvider $yahooDataProvider)
     {
         $this->yahooDataProvider = $yahooDataProvider;
@@ -28,6 +27,8 @@ class CurrencyConverter
      * @param string $toCurrency
      * @param float $value
      * @return float
+     * @throws PriceNotFoundException
+     * @throws GuzzleException
      */
     public function convertToCurrency(string $fromCurrency, string $toCurrency, float $value): float
     {
